@@ -1,0 +1,28 @@
+<!-- hsl.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HSL Picker</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+  <script src="/static/hsl.js" defer></script>
+</head>
+<body>
+  <h1 class="title">HSL Picker</h1>
+  <div class="color-picker-form">
+    <div id="slider-h" class="slider hue-slider"></div>
+    <div class="horizontal-slider">
+      <label>Saturation</label>
+      <input id="slider-s" type="range" min="0" max="100" value="100">
+    </div>
+    <div class="horizontal-slider">
+      <label>Lightness</label>
+      <input id="slider-l" type="range" min="0" max="100" value="50">
+    </div>
+  </div>
+  <div id="color-preview"></div>
+</body>
+</html>

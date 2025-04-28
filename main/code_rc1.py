@@ -115,19 +115,25 @@ class Channel:
         if (now - self.last_trail_update) < int(trail_delay * 1_000_000):
             return  # Not enough time passed
 
-        self.trail_buffer.insert(0, self.pending_value if self.channel_enabled else 0)
+        # Step 1: Update the trail buffer with current value or 0 if disabled
+        val = self.pending_value if self.channel_enabled else 0
+        self.trail_buffer.insert(0, val)
         self.trail_buffer.pop()
 
+        # Step 2: Apply brightness floor logic to trail
         for i in range(len(self.trail_buffer)):
-            value = dim_curve(self.trail_buffer[i])
+            value = self.trail_buffer[i]
+            output = 0 if value == 0 else dim_curve(value)
             color = [0, 0, 0]
-            color[self.color_index] = value
+            color[self.color_index] = output
             self.trail_strip[i] = tuple(color)
 
         self.trail_strip.show()
 
+        # Step 3: Update the cursor pixel (last trail value)
+        last_val = self.trail_buffer[-1]
         cursor_color = [0, 0, 0]
-        cursor_color[self.color_index] = dim_curve(self.trail_buffer[-1])
+        cursor_color[self.color_index] = 0 if last_val == 0 else dim_curve(last_val)
         self.cursor_strip[self.cursor_pixel_id] = tuple(cursor_color)
         self.cursor_strip.show()
 
@@ -536,52 +542,60 @@ class ColorMixMenu:
             }
         return state
 
+class RGBScreen:
+    def __init__(self, config):
+        self.cs_pin = getattr(board, config["cs"])
+        self.dc_pin = getattr(board, config["dc"])
+        self.rst_pin = getattr(board, config["rst"])
+        self.width = config["width"]
+        self.height = config["height"]
+        self.colstart = config["colstart"]
+        self.rotation = config["rotation"]
 
+        displayio.release_displays()
+        spi = board.SPI()
+        self.display_bus = FourWire(spi, command=self.dc_pin, chip_select=self.cs_pin, reset=self.rst_pin)
+        self.display = ST7789(
+            self.display_bus,
+            width=self.width,
+            height=self.height,
+            colstart=self.colstart,
+            rotation=self.rotation
+        )
 
-# --- Display and main setup ---
-displayio.release_displays()
-spi = board.SPI()
-tft_cs = board.D5
-tft_dc = board.D6
-tft_rst = board.D9
-display_bus = FourWire(spi, command=tft_dc, chip_select=tft_cs, reset=tft_rst)
-display = ST7789(display_bus, width=320, height=172, colstart=34, rotation=270)
-
-main_group = displayio.Group()
-display.root_group = main_group
+    def create_root_group(self):
+        group = displayio.Group()
+        self.display.root_group = group
+        return group
 
 i2c = board.I2C()
+
+
+screen = RGBScreen(SETTINGS["screen"])
+display = screen.display
+main_group = screen.create_root_group()
+
+# Initialize menu
 state = {}
-
-current_menu = RGBMixMenu(main_group, SETTINGS, i2c, state)
-current_menu.knob_sensitivity = 3
-tick_count = 0
-
-
-
 menus = [RGBMixMenu, ColorMixMenu]
 menu_names = ["RGB Mix", "Color Mix"]
-
-menu_encoder = MenuEncoder(SETTINGS["menu_encoder"], i2c, len(menus))
 menu_index = 0
+current_menu = menus[menu_index](main_group, SETTINGS, i2c, state)
+menu_encoder = MenuEncoder(SETTINGS["menu_encoder"], i2c, len(menus))
 
-
+# Main loop
+tick_count = 0
 while True:
-    
-    if hasattr(current_menu, "update_trails"):    current_menu.update_trails()
-    current_menu.update_encoders(enabled=True,sensitivity=current_menu.knob_sensitivity)
+    if hasattr(current_menu, "update_trails"):
+        current_menu.update_trails()
+    current_menu.update_encoders(enabled=True, sensitivity=current_menu.knob_sensitivity)
     current_menu.update_screen()
-    # time.sleep(0.05)
     menu_encoder.update()
 
-    # If menu index changed
     if menu_encoder.selected_index != menu_index:
         menu_index = menu_encoder.selected_index
         print(f"Switching to menu: {menu_names[menu_index]}")
-        
-        # current_menu.deinit()  # <<< Clean up NeoPixels and pins
-
-        main_group = displayio.Group()
-        display.root_group = main_group
+        main_group = screen.create_root_group()
         current_menu = menus[menu_index](main_group, SETTINGS, i2c, state)
-    tick_count +=1 
+
+    tick_count += 1

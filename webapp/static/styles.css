@@ -1,0 +1,136 @@
+.title {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.picker-container {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.slider-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.slider-label {
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+.slider {
+  height: 200px;
+  width: 100px; /* Make room for centered handle */
+  position: relative;
+  display: flex;
+  justify-content: center; /* This centers the pseudo background */
+  align-items: center;
+}
+
+
+.slider::before {
+  content: '';
+  position: absolute;
+  width: 20px;         /* thinner gradient bar */
+  height: 100%;
+  background: black;
+  border-radius: 4px;
+  z-index: 0;
+  
+}
+
+
+.red-bg::before {
+  background: linear-gradient(to top, black, red);
+}
+
+.green-bg::before {
+  background: linear-gradient(to top, black, green);
+}
+
+.blue-bg::before {
+  background: linear-gradient(to top, black, blue);
+}
+
+.ui-slider .ui-slider-handle {
+  left: -6px !important;
+}
+
+#color-preview {
+  margin-top: 2rem;
+  width: 200px;
+  height: 200px;
+  border-radius: 8px;
+  border: 1px solid #aaa;
+  background-color: rgb(0, 0, 0);
+  transition: background-color 0.2s ease-in-out;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+.color-info-box {
+  margin-top: 1.5rem;
+  padding: 1rem 1.5rem;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  font-family: monospace;
+  line-height: 1.6;
+  text-align: center;
+  min-width: 220px;
+}
+
+
+.settings-box {
+  margin-top: 1.5rem;
+  padding: 1rem 1.5rem;
+  background: #f9f9f9;
+  border: 1px solid #bbb;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  width: fit-content;
+  text-align: left;
+}
+.settings-box h3 {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+.settings-box label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+
+/* Transparent circular slider handle with crosshair indicator */
+.ui-slider .ui-slider-handle {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: transparent;
+  border: 2px solid #ffffffcc; /* semi-transparent white stroke */
+  box-sizing: border-box;
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+  backdrop-filter: blur(2px);
+  transition: border-color 0.2s ease;
+}
+
+/* Add a crosshair using a pseudo-element */
+.ui-slider .ui-slider-handle::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 2px;
+  background: white;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 2px rgba(0,0,0,0.6);
+}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>RGB Color Picker</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+  <script src="/static/rgb.js" defer></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+</head>
+<body>
+  <h1 class="title">RGB Color Picker</h1>
+
+  <div class="picker-container">
+    <div class="slider-column">
+      <label class="slider-label">Red</label>
+      <div id="slider-r" class="slider red-bg"></div>
+    </div>
+    <div class="slider-column">
+      <label class="slider-label">Green</label>
+      <div id="slider-g" class="slider green-bg"></div>
+    </div>
+    <div class="slider-column">
+      <label class="slider-label">Blue</label>
+      <div id="slider-b" class="slider blue-bg"></div>
+    </div>
+  </div>
+
+  <div id="color-preview"></div>
+  <div id="color-details" class="color-info-box">
+    <p><strong>R:</strong> <span id="val-r">0</span>,
+       <strong>G:</strong> <span id="val-g">0</span>,
+       <strong>B:</strong> <span id="val-b">0</span></p>
+  
+    <p><strong>HSV:</strong> <span id="val-hsv"></span></p>
+    <p><strong>HSL:</strong> <span id="val-hsl"></span></p>
+    <p><strong>Hex:</strong> <span id="val-hex">#000000</span></p>
+  </div>
+  <div id="hsv-polar-plot" style="margin-top: 2rem; width: 300px; height: 300px;"></div>
+
+  <div class="settings-box">
+    <h3>Settings</h3>
+    <label>
+      <input type="checkbox" id="toggle-units" />
+      Show values as percent / degree
+    </label>
+  </div>
+  
+</body>
+</html>

@@ -1,0 +1,55 @@
+{
+    "cursor_strip_pin": "A0",
+    "cursor_strip_count": 3,
+    "cursor_pixel_order": "RGBW", 
+    "cursor_pixel_brightness": 1.0,
+    "menu_encoder": {
+        "encoder_addr": "0x36",
+        "button_pin": 24,
+        "neopixel_pin": 6,
+        "brightness": 0.4
+    },
+    "channels": [
+        {
+            "encoder_addr": "0x37",
+            "neopixel_pin": 6,
+            "button_pin": 24,
+            "trail_pin": "D10",
+            "cursor_pixel_id": 0,
+            "initial_value": 0,
+            "brightness": 1.0,
+            "trail_pixel_order": "GRB"  
+        },
+        {
+            "encoder_addr": "0x38",
+            "neopixel_pin": 6,
+            "button_pin": 24,
+            "trail_pin": "D11",
+            "cursor_pixel_id": 1,
+            "initial_value": 0,
+            "brightness": 1.0,
+            "trail_pixel_order": "GRB"
+        },
+        {
+            "encoder_addr": "0x3A",
+            "neopixel_pin": 6,
+            "button_pin": 24,
+            "trail_pin": "D13",
+            "cursor_pixel_id": 2,
+            "initial_value": 0,
+            "brightness": 1.0,
+            "trail_pixel_order": "GRB"
+        }
+    ],
+    "screen": {
+        "cs": "D5",
+        "dc": "D6",
+        "rst": "D9",
+        "width": 320,
+        "height": 172,
+        "colstart": 34,
+        "rotation": 270
+
+
+    }
+}
